@@ -8,7 +8,7 @@ services:
 before_script:
   - docker run -d --name postgres -e POSTGRES_PASSWORD="" saidsef/clair-db:latest
   - until docker run --rm -it --link postgres:postgres -e PGPASSWORD="" postgres:9.6-alpine pg_isready -U postgres -h postgres; do sleep 5; done
-  - docker run -d --name clair --link postgres:postgres saidsef/clair-local:latest
+  - docker run -d --name clair --link postgres:postgres saidsef/clair-local:v2.0.7
 
 script:
   - ./script.sh
@@ -17,7 +17,7 @@ after_success:
   - docker stop clair
   - docker stop postgres
   - docker commit postgres saidsef/clair-db:latest
-  - docker commit clair saidsef/clair-local:latest
+  - docker commit clair saidsef/clair-local:v2.0.7
   - docker images
 
 before_deploy:
@@ -29,4 +29,4 @@ deploy:
     branch: master
   script:
     docker push saidsef/clair-db:latest &&
-    docker push saidsef/clair-local:latest
+    docker push saidsef/clair-local:v2.0.7
