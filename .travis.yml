@@ -1,0 +1,32 @@
+sudo: required
+
+language: python
+
+services:
+  - docker
+
+before_script:
+  - docker run -d --name postgres -e POSTGRES_PASSWORD="" -p 5432:5432 saidsef/clair-db:latest
+  - until docker run --rm -it --link postgres:postgres -e PGPASSWORD="" postgres:9.6-alpine pg_isready -U postgres -h postgres; do sleep 5; done
+  - docker run -d --name clair --link postgres:postgres saidsef/clair-local:latest
+
+script:
+  - ./script.sh
+
+after_success:
+  - docker stop clair
+  - docker stop postgres
+  - docker commit postgres saidsef/clair-db:latest
+  - docker commit clair saidsef/clair-local:latest
+  - docker images
+
+before_deploy:
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+
+deploy:
+  provider: script
+  on:
+    branch: master
+  script:
+    docker push saidsef/clair-db:latest &&
+    docker push saidsef/clair-local:latest
