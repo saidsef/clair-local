@@ -6,7 +6,7 @@ services:
   - docker
 
 before_script:
-  - docker run -d --name postgres -e POSTGRES_PASSWORD="" -p 5432:5432 saidsef/clair-db:latest
+  - docker run -d --name postgres -e POSTGRES_PASSWORD="" saidsef/clair-db:latest
   - until docker run --rm -it --link postgres:postgres -e PGPASSWORD="" postgres:9.6-alpine pg_isready -U postgres -h postgres; do sleep 5; done
   - docker run -d --name clair --link postgres:postgres saidsef/clair-local:latest
 
