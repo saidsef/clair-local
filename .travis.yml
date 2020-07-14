@@ -1,6 +1,9 @@
+dist: xenial
 sudo: required
-
-language: python
+branches:
+  only:
+  - master
+  - "/^release-.*$/"
 
 services:
   - docker
@@ -21,7 +24,7 @@ after_success:
   - docker images
 
 before_deploy:
-  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
 
 deploy:
   provider: script
