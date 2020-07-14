@@ -16,7 +16,7 @@ do
         exit 1
     fi
 
-    echo -n "."
+    echo -n "|"
     sleep 10
 done
 echo " done .."
