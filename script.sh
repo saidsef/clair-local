@@ -9,12 +9,12 @@ do
         break
     fi
 
-    docker logs "$JOB" | grep "an error occured" >& /dev/null
-    if [ $? == 0 ]; then
-        echo "Error" >&2
-        docker logs "$JOB"
-        exit 1
-    fi
+    # docker logs "$JOB" | grep "an error occured" >& /dev/null
+    # if [ $? == 0 ]; then
+    #     echo "Error" >&2
+    #     docker logs "$JOB"
+    #     exit 1
+    # fi
 
     echo -n "|"
     sleep 10
